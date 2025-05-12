@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import "../app.css"
 
 const TaskList = ({ refresh }) => {
     const [tasks, setTasks] = useState([]);
+    const [loading, setLoading] = useState(true); 
 
     const getTasksFromCookies = () => {
         const match = document.cookie
@@ -19,6 +21,7 @@ const TaskList = ({ refresh }) => {
 
     const fetchTasks = async () => {
         try {
+            setLoading(true);
             const res = await fetch("https://kazam-project.vercel.app/fetchAllTasks");
             const data = await res.json();
             const backendTasks = data.tasks || [];
@@ -29,6 +32,8 @@ const TaskList = ({ refresh }) => {
             setTasks(merged);
         } catch (err) {
             console.error("Error fetching tasks:", err);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -47,31 +52,35 @@ const TaskList = ({ refresh }) => {
             }}
         >
             <h2>Notes</h2>
-            <div
-                style={{
-                    height: "340px",
-                    overflowY: "scroll",
-                    paddingRight: "10px",
-                }}
-            >
-                {tasks.map((task, index) => (
-                    <div
-                        key={index}
-                        style={{
-                            borderBottom: "1px solid #ccc",
-                            padding: "15px",
-                            background: "#f3f3f3",
-                            marginBottom: "10px",
-                            borderRadius: "6px",
-                        }}
-                    >
-                        {typeof task === "string" ? task : task.title}
-                    </div>
-                ))}
-            </div>
 
-
-
+            {loading ? (
+                <div style={{ textAlign: "center", marginTop: "50px" }}>
+                    <span className="loader"></span>
+                </div>
+            ) : (
+                <div
+                    style={{
+                        height: "340px",
+                        overflowY: "scroll",
+                        paddingRight: "10px",
+                    }}
+                >
+                    {tasks.map((task, index) => (
+                        <div
+                            key={index}
+                            style={{
+                                borderBottom: "1px solid #ccc",
+                                padding: "15px",
+                                background: "#f3f3f3",
+                                marginBottom: "10px",
+                                borderRadius: "6px",
+                            }}
+                        >
+                            {typeof task === "string" ? task : task.title}
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };
