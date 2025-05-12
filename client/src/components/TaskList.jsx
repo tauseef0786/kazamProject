@@ -19,7 +19,7 @@ const TaskList = ({ refresh }) => {
 
     const fetchTasks = async () => {
         try {
-            const res = await fetch("http://localhost:8080/fetchAllTasks");
+            const res = await fetch("https://kazam-project.vercel.app/fetchAllTasks");
             const data = await res.json();
             const backendTasks = data.tasks || [];
 

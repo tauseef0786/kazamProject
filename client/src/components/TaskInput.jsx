@@ -31,7 +31,7 @@ const TaskInput = ({ onTaskAdded }) => {
     const updatedTasks = [...tasks, newTask];
 
     if (updatedTasks.length === 50) {
-      await fetch("http://localhost:8080/storeTasks", {
+      await fetch("https://kazam-project.vercel.app/storeTasks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tasks: updatedTasks }),
